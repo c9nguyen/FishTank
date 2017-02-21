@@ -1,0 +1,26 @@
+<i>
+  <i image="fly_0.png" delay="120" x="-32" y="-63"/>
+  <i image="fly_1.png" delay="120" x="-32" y="-63"/>
+  <i image="fly_2.png" delay="120" x="-32" y="-63"/>
+  <i image="fly_3.png" delay="120" x="-32" y="-63"/>
+  <i image="fly_4.png" delay="120" x="-32" y="-63"/>
+  <i image="fly_5.png" delay="120" x="-32" y="-63"/>
+  <i image="attack1.info.hit_0.png" delay="300" x="-46" y="-78"/>
+  <i image="attack1_0.png" delay="120" x="-87" y="-71"/>
+  <i image="attack1_1.png" delay="120" x="-87" y="-71"/>
+  <i image="attack1_2.png" delay="120" x="-87" y="-71"/>
+  <i image="attack1_3.png" delay="120" x="-87" y="-71"/>
+  <i image="attack1_4.png" delay="100" x="-87" y="-71"/>
+  <i image="attack1_5.png" delay="100" x="-87" y="-71"/>
+  <i image="attack1_6.png" delay="100" x="-87" y="-71"/>
+  <i image="attack1_7.png" delay="100" x="-87" y="-71"/>
+  <i image="attack1_8.png" delay="100" x="-87" y="-71"/>
+  <i image="attack1_9.png" delay="100" x="-87" y="-71"/>
+  <i image="attack1_10.png" delay="100" x="-87" y="-71"/>
+  <i image="attack1_11.png" delay="100" x="-87" y="-71"/>
+  <i image="hit1_0.png" delay="600" x="-39" y="-67"/>
+  <i image="die1_0.png" delay="120" x="-34" y="-65"/>
+  <i image="die1_1.png" delay="120" x="-34" y="-65"/>
+  <i image="die1_2.png" delay="120" x="-34" y="-65"/>
+  <i image="die1_3.png" delay="300" x="-34" y="-65"/>
+</i>

@@ -1,0 +1,16 @@
+<i>
+  <i image="fly_0.png" delay="150" x="-59" y="-76"/>
+  <i image="fly_1.png" delay="150" x="-59" y="-76"/>
+  <i image="fly_2.png" delay="150" x="-59" y="-76"/>
+  <i image="fly_3.png" delay="150" x="-59" y="-76"/>
+  <i image="fly_4.png" delay="150" x="-59" y="-76"/>
+  <i image="fly_5.png" delay="150" x="-59" y="-76"/>
+  <i image="hit1_0.png" delay="600" x="-49" y="-82"/>
+  <i image="die1_0.png" delay="150" x="-51" y="-91"/>
+  <i image="die1_1.png" delay="150" x="-51" y="-91"/>
+  <i image="die1_2.png" delay="150" x="-51" y="-91"/>
+  <i image="die1_3.png" delay="150" x="-51" y="-91"/>
+  <i image="die1_4.png" delay="150" x="-51" y="-91"/>
+  <i image="die1_5.png" delay="300" x="-51" y="-91"/>
+  <i image="die1_6.png" delay="300" x="-51" y="-91"/>
+</i>
