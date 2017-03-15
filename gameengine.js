@@ -14,6 +14,7 @@ const BIG = 1
 const MID = 2;
 const SMALL = 3;
 const FOOD = 4;
+const UI = -1;
 
 const GRAVITY = 1800; //can change this to make gravity better
 
@@ -22,13 +23,12 @@ function GameEngine() {
     this.collisionBox = {
         ground: [],
     };
-    this.playerList = [];
-    this.enemyList = [];
+    this.ui = [];
+    this.entities = [];
+    this.big = [];
     this.mid = [];
     this.small = [];
-    
-    this.portals = [];  // will be removed
-    this.food = []; // will be removed
+    this.food = [];
     this.ctx = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
@@ -47,8 +47,9 @@ function GameEngine() {
                       //  this.pressed = false;
                     }};
     this.events = {
-
     }
+    this.save = false;
+    this.load = false;
 }
 
 GameEngine.prototype.init = function (ctx) {
@@ -56,6 +57,7 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.timer = new Timer();
+    this.DM = new DatabaseManager(this);
     this.startInput();
     console.log('game initialized');
 }
@@ -89,19 +91,9 @@ GameEngine.prototype.startInput = function () {
     }, false);
 
     this.ctx.canvas.addEventListener("click", function (e) {
-        if (that.food.length < 5) {
-        var coor = getXandY(e);
-        spawnUnit(that, coor.x, coor.y, "food", FOOD);
-        }
-
+        that.mouse.click = true;
     }, false);
 
-    // this.ctx.canvas.addEventListener("contextmenu", function (e) {
-    //     that.click = getXandY(e);
-    //     console.log(e);
-    //     console.log("Right Click Event - X,Y " + e.clientX + ", " + e.clientY);
-    //     e.preventDefault();
-    // }, false);
 
     this.ctx.canvas.addEventListener("mousemove", function (e) {
         var coor = getXandY(e);
@@ -110,28 +102,7 @@ GameEngine.prototype.startInput = function () {
        // console.log(coor);
     }, false);
 
-    // this.ctx.canvas.addEventListener("mousewheel", function (e) {
-    //     console.log(e);
-    //     that.wheel = e;
-    //     console.log("Click Event - X,Y " + e.clientX + ", " + e.clientY + " Delta " + e.deltaY);
-    // }, false);
 
-    // this.ctx.canvas.addEventListener("keydown", function (e) {
-    //     console.log(e);
-    //     console.log("Key Down Event - Char " + e.code + " Code " + e.keyCode);
-    // }, false);
-
-    // this.ctx.canvas.addEventListener("keypress", function (e) {
-    //     if (e.code === "KeyD") that.d = true;
-    //     that.chars[e.code] = true;
-    //     console.log(e);
-    //     console.log("Key Pressed Event - Char " + e.charCode + " Code " + e.keyCode);
-    // }, false);
-
-    // this.ctx.canvas.addEventListener("keyup", function (e) {
-    //     console.log(e);
-    //     console.log("Key Up Event - Char " + e.code + " Code " + e.keyCode);
-    // }, false);
 
     console.log('Input started');
 }
@@ -139,46 +110,80 @@ GameEngine.prototype.startInput = function () {
 
 GameEngine.prototype.addEntity = function (entity) {
  //   console.log('added entity');
-    if (entity.side === MID) this.mid.push(entity);
-    else if (entity.side === SMALL) this.small.push(entity);
-    this.sceneManager.addEntityToScene(entity);
+    if (entity.side === UI) {
+        this.ui.push(entity);
+    } else {
+        if (entity.side === MID) this.mid.push(entity);
+        else if (entity.side === SMALL) this.small.push(entity);
+        else if (entity.side === BIG) this.big.push(entity);
+        this.entities.push(entity);
+    }
+
 }
 
 GameEngine.prototype.draw = function () {
     this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
     this.ctx.save();
-    var entities = this.sceneManager.getCurrentEntities();
+    var entities = this.entities;
     for (var i = 0; i < entities.length; i++) {
         entities[i].draw(this.ctx);
+    }
+    for (var i = 0; i < this.ui.length; i++) {
+        this.ui[i].draw(this.ctx);
     }
     this.ctx.restore();
 }
 
 GameEngine.prototype.update = function () {
-    var entities = this.sceneManager.getCurrentEntities();
+    var entities = this.entities;
     var food = this.food;
+    // console.log(this.food.length);
+    // console.log(this.entities.length + " = " + this.mid.length + " + " + this.small.length);
+
+    for (var i = 0; i < this.ui.length; i++) {
+        this.ui[i].update();
+        if (this.ui[i].removeFromWorld) {
+            this.ui.splice(i, 1);
+            i--;
+        }
+        
+    }
+
    for (var i = 0; i < food.length; i++) {
  
-            if (food[i].removeFromWorld) {
-                food.splice(i, 1);
-                i--;
-            }
+        if (food[i].removeFromWorld) {
+            food.splice(i, 1);
+            i--;
+        }
     }
     for (var i = 0; i < entities.length; i++) {
-        //If this enetity will be removed
             var entity = entities[i];
 
-            //applying gravity
-            // if (entity.gravity) entity.yVelocity += this.clockTick * 1800;
-            // else entity.yVelocity = 0;      //Will be changed
-            // entity.y += this.clockTick * entity.yVelocity;
 
-            entity.update();
+            
             if (entities[i].removeFromWorld) {
                 entities.splice(i, 1);
                 i--;
+            } else {
+                entity.update();
             }
     }
+
+    if (this.mouse.click) {
+        if (this.food.length < 5) {
+        var coor = this.mouse;
+        spawnUnit(this, coor.x, coor.y, "food", FOOD);
+        }
+    }
+
+    if (this.save) this.DM.socket.emit("save", { studentname: "Chinh Nguyen", 
+                                                statename: "fishtank", 
+                                                fishList: this.DM.prepData(this) });
+    else if (this.load) 
+    this.DM.socket.emit("load", { studentname: "Chinh Nguyen", 
+                                statename: "fishtank"});
+    this.save = false;
+    this.load = false;
     this.mouse.reset();
 }
 
@@ -186,6 +191,27 @@ GameEngine.prototype.loop = function () {
     this.clockTick = this.timer.tick();
     this.update();
     this.draw();
+}
+
+function Timer() {
+    this.gameTime = 0;
+    this.maxStep = 0.05;
+    this.wallLastTimestamp = 0;
+}
+
+GameEngine.prototype.clearFish = function () {
+    this.big.map(function(fish) {
+        fish.removeFromWorld = true;
+    });
+    this.mid.map(function(fish) {
+        fish.removeFromWorld = true;
+    });
+    this.small.map(function(fish) {
+        fish.removeFromWorld = true;
+    });
+    this.food.map(function(food) {
+        food.removeFromWorld = true;
+    });
 }
 
 function Timer() {

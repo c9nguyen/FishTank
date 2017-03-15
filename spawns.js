@@ -67,26 +67,29 @@ function spawnUnit(game, x, y, unitcode, side = NEUTRAL) {
 
                 var small = this.game.small;
                 for (var i in small) {
-                    small[i].changeAction("hit_left");
-                    var enemy = small[i];
-                    enemy.food = undefined;
-                    if (collise(collisionBox, enemy.getCollisionBox())) {
-                        small[i].removeFromWorld = true;
-                        this.unit.health += small[i].health;
-                        this.unit.health = Math.min(this.unit.health, 100);
+                    if (!small[i].removeFromWorld) {
+                        small[i].changeAction("hit_left");
+                        var enemy = small[i];
+                        enemy.food = undefined;
+                        if (collise(collisionBox, enemy.getCollisionBox())) {
+                            small[i].removeFromWorld = true;
+                            this.unit.health += small[i].health;
+                            this.unit.health = Math.min(this.unit.health, 100);
+                        } else {
+                            if (enemy.x < collisionBox.x) {
+                                enemy.velocity.x = 80;
+                            } else if (enemy.x > collisionBox.x) {
+                                enemy.velocity.x = -80;
+                            }
+                            if (enemy.y < collisionBox.y) {
+                                enemy.velocity.y = 80;
+                            } else if (enemy.y > collisionBox.y) {
+                                enemy.velocity.y = -80;
+                            }
+                        }
+                    } else {
                         small.splice(i, 1);
                         i--;
-                    } else {
-                        if (enemy.x < collisionBox.x) {
-                            enemy.velocity.x = 80;
-                        } else if (enemy.x > collisionBox.x) {
-                            enemy.velocity.x = -80;
-                        }
-                        if (enemy.y < collisionBox.y) {
-                            enemy.velocity.y = 80;
-                        } else if (enemy.y > collisionBox.y) {
-                            enemy.velocity.y = -80;
-                        }
                     }
                 }
             }
@@ -115,9 +118,6 @@ function spawnUnit(game, x, y, unitcode, side = NEUTRAL) {
             unit.actions["eat1"] = eat1;
             unit.actions["eat2"] = eat2;
             unit.actions["die"] = die;
-            // unit.actions["attack"] = attack;
-            // unit.actions["attack2"] = attack2;
-            // unit.actions["die"] = die;
             unit.defaultAction = stand;
             unit.currentAction = stand;
             unit.setCollisionReacts(function() { }, 
@@ -175,7 +175,6 @@ function spawnUnit(game, x, y, unitcode, side = NEUTRAL) {
                         }
                     }
                 }
-                console.log(this.food);
                 if (this.food !== undefined && this.food.x < box.x) {
                     this.unit.changeAction("move_left");
                     this.unit.velocity.x = -this.unit.movementspeed * 2;
@@ -240,7 +239,7 @@ function spawnUnit(game, x, y, unitcode, side = NEUTRAL) {
                         }
                     }
                 }
-                console.log(this.food);
+
                 if (this.food !== undefined && this.food.x < box.x) {
                     this.unit.changeAction("move_right");
                     this.unit.velocity.x = -this.unit.movementspeed * 2;

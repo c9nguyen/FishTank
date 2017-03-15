@@ -1,0 +1,21 @@
+{
+  "name": "fishtank",
+  "version": "1.0.0",
+  "description": "Fish Tank for assignment 2 and 3",
+  "main": "database.js",
+  "dependencies": {
+    "express": "^4.15.2",
+    "mongojs": "^2.4.0",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c9nguyen/FishTank/"
+  },
+  "author": "Chinh",
+  "license": "ISC"
+}

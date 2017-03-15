@@ -1,46 +1,6 @@
 var canvasWidth = 0;
 var canvasHeight = 0;
 
-
-// function Animation(spriteSheet, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale) {
-//     this.spriteSheet = spriteSheet;
-//     this.frameWidth = frameWidth;
-//     this.frameDuration = frameDuration;
-//     this.frameHeight = frameHeight;
-//     this.sheetWidth = sheetWidth;
-//     this.frames = frames;
-//     this.totalTime = frameDuration * frames;
-//     this.elapsedTime = 0;
-//     this.loop = loop;
-//     this.scale = scale;
-// }
-
-// Animation.prototype.drawFrame = function (tick, ctx, x, y) {
-//     this.elapsedTime += tick;
-//     if (this.isDone()) {
-//         if (this.loop) this.elapsedTime = 0;
-//     }
-//     var frame = this.currentFrame();
-//     var xindex = 0;
-//     var yindex = 0;
-//     xindex = frame % this.sheetWidth;
-//     yindex = Math.floor(frame / this.sheetWidth);
-//     ctx.drawImage(this.spriteSheet,
-//                  xindex * this.frameWidth, yindex * this.frameHeight,  // source from sheet
-//                  this.frameWidth, this.frameHeight,
-//                  x, y,
-//                  this.frameWidth * this.scale,
-//                  this.frameHeight * this.scale);
-// }
-
-// Animation.prototype.currentFrame = function () {
-//     return Math.floor(this.elapsedTime / this.frameDuration);
-// }
-
-// Animation.prototype.isDone = function () {
-//     return (this.elapsedTime >= this.totalTime);
-// }
-
 /*===============================================================*/
 
 /**
@@ -299,9 +259,9 @@ Action.prototype.update = function() {//Updating the coordinate for the unit in 
    // if (!this.loop && this.isDone()) this.end(); // perform ending action
     var frame = this.currentFrame();
     //Updating ground point
-    var groundPoint = this.getFrameGroundPoint(frame); 
-    this.x = this.unit.x - groundPoint.x;
-    this.y = this.unit.y - groundPoint.y;
+    //var groundPoint = this.getFrameGroundPoint(frame); 
+    this.x = this.unit.x;
+    this.y = this.unit.y;
     //Updating collisionBox
     if (this.unit.health > 0) {
         var collisionBox = this.getFrameHitbox(frame);
@@ -386,7 +346,7 @@ function Unit(game, x = 0, y = 0, unitcode, side) {
     //Stats
     this.health = this.data.health;
     this.movementspeed = this.data.movementspeed;
-    this.att = this.data.att;
+
 
     this.actions = {}; //contains all actions this unit can perform (walk, stand, attack)
     this.defaultAction;
